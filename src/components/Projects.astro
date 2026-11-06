@@ -1,0 +1,96 @@
+---
+import SectionHeading from './SectionHeading.astro';
+import { projects } from '../data/profile';
+import { useI18n, formatMetric } from '../i18n';
+
+const { locale, t } = useI18n(Astro.currentLocale);
+const items = projects.map((p) => {
+  const copy = t.projects.items[p.slug];
+  return { ...p, ...copy, stack: [...p.stack, ...(copy.stackExtra ?? [])] };
+});
+---
+
+<section id="projects" aria-labelledby="projects-title" class="shell border-t border-rule-strong py-16 md:py-24">
+  <div class="grid gap-10 md:grid-cols-12 md:gap-8">
+    <SectionHeading index="02" id="projects-title" title={t.projects.title} kicker={t.projects.kicker} />
+
+    <ol class="md:col-span-9">
+      {
+        items.map((p, i) => {
+          const featured = i === 0;
+          return (
+            <li
+              class:list={[
+                'reveal',
+                featured ? 'mb-4 border border-rule bg-sunken p-6 md:p-8' : 'border-b border-rule py-10 last:border-b-0',
+                p.exploratory && 'mt-4 border-t border-dashed border-t-rule',
+              ]}
+            >
+              <article
+                aria-labelledby={`${p.slug}-title`}
+                class="project grid gap-6 lg:grid-cols-[1fr_12.5rem] lg:gap-10"
+              >
+                <div>
+                  <div class="flex flex-wrap items-center gap-x-3 gap-y-2">
+                    <p class="project-index label tabular-nums">
+                      {String(i + 1).padStart(2, '0')}
+                      {featured && <span class="text-accent"> · {t.projects.featured}</span>}
+                    </p>
+                    {p.status && (
+                      <p class="border border-dashed border-faint px-2 py-0.5 font-mono text-[0.68rem] uppercase tracking-[0.08em] text-muted">
+                        {p.status}
+                      </p>
+                    )}
+                  </div>
+                  <span class="project-rail mt-3 block h-px w-16 bg-accent" aria-hidden="true" />
+                  <h3
+                    id={`${p.slug}-title`}
+                    class:list={[
+                      'mt-4 font-display leading-[1.08] tracking-[-0.02em] [hyphens:auto]',
+                      featured ? 'text-[2rem] md:text-[2.6rem]' : 'text-[1.7rem] md:text-[2rem]',
+                      p.exploratory && 'text-muted',
+                    ]}
+                  >
+                    {p.title}
+                  </h3>
+                  <p class="mt-3 max-w-[62ch] text-muted">{p.summary}</p>
+                  <ul class="mt-6 space-y-3 text-[0.95rem] leading-relaxed">
+                    {p.bullets.map((b) => (
+                      <li class="relative pl-5 before:absolute before:left-0 before:top-[0.7em] before:h-px before:w-2.5 before:bg-accent">
+                        {b}
+                      </li>
+                    ))}
+                  </ul>
+                  <p class="mt-6 font-mono text-xs leading-relaxed text-faint">
+                    <span class="sr-only">{t.a11y.stack} </span>
+                    {p.stack.join(' / ')}
+                  </p>
+                </div>
+
+                <div class="flex flex-row items-end justify-between gap-6 border-t border-rule pt-5 lg:flex-col lg:items-start lg:justify-start lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0">
+                  {p.metric ? (
+                    <p>
+                      <span class="block font-display text-[3.25rem] font-light leading-none tracking-[-0.03em] text-accent tabular-nums md:text-6xl">
+                        {formatMetric(p.metric.value, p.metric.decimals, locale)}
+                      </span>
+                      <span class="mt-3 block max-w-[24ch] text-xs leading-snug text-muted">{p.metricCaption}</span>
+                    </p>
+                  ) : (
+                    <p class="max-w-[24ch] text-xs leading-snug text-muted">{t.projects.noMetric}</p>
+                  )}
+                  <a
+                    href={p.repo}
+                    class="repo-link link shrink-0 font-mono text-xs uppercase tracking-[0.08em] lg:mt-auto"
+                    aria-label={`${p.title}: ${t.a11y.repoOnGitHub}`}
+                  >
+                    {t.projects.repository} <span class="repo-arrow" aria-hidden="true">↗</span>
+                  </a>
+                </div>
+              </article>
+            </li>
+          );
+        })
+      }
+    </ol>
+  </div>
+</section>

@@ -1,0 +1,95 @@
+---
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import { useI18n, locales, localeMeta } from '../i18n';
+
+const { locale, t } = useI18n(Astro.currentLocale);
+
+const nav = [
+  { href: '#experience', label: t.nav.experience, show: 'hidden md:block' },
+  { href: '#projects', label: t.nav.projects, show: 'hidden md:block' },
+  { href: '#skills', label: t.nav.skills, show: 'hidden sm:block' },
+  { href: '#contact', label: t.nav.contact, show: '' },
+];
+---
+
+<header class="sticky top-0 z-20 border-b border-rule bg-surface/90 backdrop-blur-sm">
+  <div class="shell flex h-14 items-center justify-between gap-4">
+    <a
+      href={getRelativeLocaleUrl(locale)}
+      class="shrink-0 font-display text-lg tracking-tight"
+      aria-label={t.a11y.home}
+    >
+      <span class="lg:hidden">M.&thinsp;Calviño</span>
+      <span class="hidden lg:inline">Mireia Calviño Saez</span>
+    </a>
+
+    <div class="flex items-center gap-4 sm:gap-6">
+      <nav aria-label={t.a11y.primaryNav}>
+        <ul class="flex items-center gap-4 sm:gap-6">
+          {
+            nav.map((item) => (
+              <li class={item.show}>
+                <a
+                  href={item.href}
+                  class="font-mono text-[0.7rem] uppercase tracking-[0.08em] text-muted transition-colors duration-150 hover:text-accent"
+                >
+                  {item.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      <!-- Language switcher: plain links (crawlable, works without JS). -->
+      <nav aria-label={t.a11y.languageNav} class="border-l border-rule pl-4 sm:pl-6">
+        <ul class="flex items-center font-mono text-[0.7rem] uppercase tracking-[0.08em]">
+          {
+            locales.map((l, i) => (
+              <li class="flex items-center">
+                {i > 0 && (
+                  <span class="px-1.5 text-rule" aria-hidden="true">
+                    |
+                  </span>
+                )}
+                {l === locale ? (
+                  <span class="font-medium text-ink" aria-current="page" title={localeMeta[l].name}>
+                    {localeMeta[l].short}
+                  </span>
+                ) : (
+                  <a
+                    href={getRelativeLocaleUrl(l)}
+                    hreflang={localeMeta[l].htmlLang}
+                    lang={localeMeta[l].htmlLang}
+                    title={localeMeta[l].name}
+                    aria-label={localeMeta[l].name}
+                    data-locale-link
+                    class="text-faint transition-colors duration-150 hover:text-accent"
+                  >
+                    {localeMeta[l].short}
+                  </a>
+                )}
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+    </div>
+  </div>
+  <div class="scroll-progress absolute inset-x-0 -bottom-px h-px bg-accent" aria-hidden="true"></div>
+</header>
+
+<script>
+  // Progressive enhancement: keep the reader's place when switching language.
+  // Section ids are identical across locales, so we append the id of the
+  // section currently in view. Without JS the links still work (page top).
+  document.querySelectorAll<HTMLAnchorElement>('a[data-locale-link]').forEach((link) => {
+    link.addEventListener('click', () => {
+      const sections = [...document.querySelectorAll<HTMLElement>('main section[id]')];
+      const current = sections.filter((s) => s.getBoundingClientRect().top <= window.innerHeight * 0.35).pop();
+      const url = new URL(link.href);
+      url.hash = current ? current.id : '';
+      link.href = url.toString();
+    });
+  });
+</script>

@@ -1,0 +1,51 @@
+---
+import SectionHeading from './SectionHeading.astro';
+import { profile } from '../data/profile';
+import { useI18n } from '../i18n';
+
+const { t } = useI18n(Astro.currentLocale);
+
+const channels = [
+  { label: 'LinkedIn', href: profile.links.linkedin, handle: 'in/mireia-calvino' },
+  { label: 'GitHub', href: profile.links.github, handle: 'mireiaacss' },
+  ...(profile.links.social ? [{ label: 'Social', href: profile.links.social, handle: profile.links.social }] : []),
+];
+---
+
+<section id="contact" aria-labelledby="contact-title" class="shell border-t border-rule-strong py-16 md:py-24">
+  <div class="grid gap-10 md:grid-cols-12 md:gap-8">
+    <SectionHeading index="04" id="contact-title" title={t.contact.title} />
+
+    <div class="reveal md:col-span-9">
+      <p class="max-w-[28ch] font-display text-[1.75rem] font-light leading-[1.18] tracking-[-0.015em] md:text-[2.5rem]">
+        {t.contact.callout}
+      </p>
+
+      <a
+        href={`mailto:${profile.email}`}
+        class="group mt-10 inline-block break-all font-display text-2xl text-accent sm:text-3xl md:text-4xl"
+      >
+        <span class="underline decoration-1 underline-offset-[0.18em] transition-colors duration-150 group-hover:text-accent-strong">
+          {profile.email}
+        </span>
+      </a>
+
+      <ul class="mt-12 grid gap-0 sm:grid-cols-3 sm:gap-8">
+        {
+          channels.map((c) => (
+            <li class="border-t border-rule py-4">
+              <p class="label">{c.label}</p>
+              <a class="link mt-1 inline-block" href={c.href} rel="me">
+                {c.handle}
+              </a>
+            </li>
+          ))
+        }
+        <li class="border-t border-rule py-4">
+          <p class="label">{t.contact.basedIn}</p>
+          <p class="mt-1">{t.contact.location}</p>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>

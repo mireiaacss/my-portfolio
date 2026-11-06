@@ -1,0 +1,15 @@
+---
+import { profile } from '../data/profile';
+import { useI18n } from '../i18n';
+
+const { t } = useI18n(Astro.currentLocale);
+const year = new Date().getFullYear();
+---
+
+<footer class="border-t border-rule">
+  <div class="shell flex flex-col gap-3 py-8 font-mono text-xs text-faint sm:flex-row sm:items-center sm:justify-between">
+    <p>© {year} {profile.name}</p>
+    <p>{t.footer.colophon}</p>
+    <a href="#top" class="link">{t.footer.backToTop} ↑</a>
+  </div>
+</footer>

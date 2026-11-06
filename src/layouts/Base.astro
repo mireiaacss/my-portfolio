@@ -1,0 +1,113 @@
+---
+import { Font } from 'astro:assets';
+import { getAbsoluteLocaleUrl } from 'astro:i18n';
+import '../styles/global.css';
+import { profile } from '../data/profile';
+import { useI18n, locales, localeMeta, defaultLocale } from '../i18n';
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+}
+
+const { locale, t } = useI18n(Astro.currentLocale);
+const { title, description, image = '/og-image.png' } = Astro.props;
+
+const canonical = getAbsoluteLocaleUrl(locale);
+const alternates = locales.map((l) => ({ hreflang: localeMeta[l].htmlLang, href: getAbsoluteLocaleUrl(l) }));
+const xDefault = getAbsoluteLocaleUrl(defaultLocale);
+const ogImage = new URL(image, Astro.site);
+
+const sameAs = [profile.links.linkedin, profile.links.github, profile.links.social].filter(Boolean);
+
+const personLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  // Same @id on every locale: one entity, three localised pages.
+  '@id': new URL('/#person', Astro.site).href,
+  name: profile.name,
+  givenName: profile.givenName,
+  familyName: profile.familyName,
+  description: `${t.hero.careerTarget}. ${t.hero.lead}`,
+  jobTitle: t.jobTitle,
+  worksFor: {
+    '@type': 'Organization',
+    name: profile.worksFor.name,
+    url: profile.worksFor.url,
+  },
+  affiliation: {
+    '@type': 'CollegeOrUniversity',
+    name: 'Esade Business & Law School, Universitat Ramon Llull',
+  },
+  url: canonical,
+  mainEntityOfPage: canonical,
+  image: ogImage.href,
+  email: `mailto:${profile.email}`,
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: profile.location.locality,
+    addressCountry: profile.location.country,
+  },
+  sameAs,
+  knowsAbout: profile.knowsAbout,
+  knowsLanguage: ['es', 'ca', 'en', 'de'],
+};
+---
+
+<!doctype html>
+<html lang={localeMeta[locale].htmlLang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content={profile.name} />
+    <link rel="canonical" href={canonical} />
+    {alternates.map((a) => <link rel="alternate" hreflang={a.hreflang} href={a.href} />)}
+    <link rel="alternate" hreflang="x-default" href={xDefault} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- OpenGraph -->
+    <meta property="og:type" content="profile" />
+    <meta property="og:site_name" content={profile.name} />
+    <meta property="og:locale" content={localeMeta[locale].ogLocale} />
+    {
+      locales
+        .filter((l) => l !== locale)
+        .map((l) => <meta property="og:locale:alternate" content={localeMeta[l].ogLocale} />)
+    }
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={t.meta.ogImageAlt} />
+    <meta property="profile:first_name" content={profile.givenName} />
+    <meta property="profile:last_name" content={profile.familyName} />
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={t.meta.ogImageAlt} />
+
+    <Font cssVariable="--font-newsreader" preload />
+    <Font cssVariable="--font-geist" preload />
+    <Font cssVariable="--font-geist-mono" />
+
+    <script type="application/ld+json" set:html={JSON.stringify(personLd)} />
+  </head>
+  <body class="min-h-dvh">
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:bg-ink focus:px-4 focus:py-2 focus:text-surface"
+      >{t.a11y.skip}</a
+    >
+    <slot />
+  </body>
+</html>

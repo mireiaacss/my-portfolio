@@ -1,0 +1,29 @@
+---
+// Shared homepage; each locale route (/, /es/, /ca/) renders this.
+// The locale is read from Astro.currentLocale inside every component.
+import Base from '../layouts/Base.astro';
+import SiteHeader from './SiteHeader.astro';
+import Hero from './Hero.astro';
+import Experience from './Experience.astro';
+import Projects from './Projects.astro';
+import Skills from './Skills.astro';
+import Contact from './Contact.astro';
+import SiteFooter from './SiteFooter.astro';
+import { profile } from '../data/profile';
+import { useI18n } from '../i18n';
+
+const { t } = useI18n(Astro.currentLocale);
+---
+
+<Base title={`${profile.name} - ${t.meta.role}`} description={t.meta.description}>
+  <div id="top"></div>
+  <SiteHeader />
+  <main id="main">
+    <Hero />
+    <Experience />
+    <Projects />
+    <Skills />
+    <Contact />
+  </main>
+  <SiteFooter />
+</Base>

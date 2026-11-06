@@ -1,0 +1,19 @@
+---
+interface Props {
+  index: string;
+  id: string;
+  title: string;
+  kicker?: string;
+}
+const { index, id, title, kicker } = Astro.props;
+---
+
+<div class="md:col-span-3">
+  <div class="md:sticky md:top-24">
+    <p class="label">{index}</p>
+    <h2 id={id} class="mt-2 font-display text-4xl leading-none tracking-[-0.02em] md:text-[2.75rem]">
+      {title}
+    </h2>
+    {kicker && <p class="mt-4 max-w-[22ch] text-sm leading-relaxed text-muted">{kicker}</p>}
+  </div>
+</div>

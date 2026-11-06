@@ -1,0 +1,86 @@
+---
+import { profile, trajectory } from '../data/profile';
+import { useI18n } from '../i18n';
+
+const { t } = useI18n(Astro.currentLocale);
+const rows = trajectory.map((row, i) => ({ ...row, ...t.hero.trajectory[i] }));
+---
+
+<section aria-labelledby="hero-title" class="shell pb-14 pt-8 md:pb-20 md:pt-16">
+  <div class="grid gap-10 md:grid-cols-12 md:gap-8">
+    <!-- Identity + positioning -->
+    <div class="md:col-span-7 md:pr-4">
+      <p class="label flex items-center gap-2">
+        <span class="inline-block h-px w-6 bg-accent" aria-hidden="true"></span>
+        {t.hero.location}
+      </p>
+
+      <h1 id="hero-title" class="mt-5">
+        <span class="block font-display text-3xl leading-tight tracking-[-0.02em] md:text-4xl">
+          {profile.name}
+        </span>
+        <span class="mt-2 block text-[0.95rem] font-medium leading-snug text-accent md:text-lg">
+          {t.hero.careerTarget}
+        </span>
+      </h1>
+
+      <p
+        class="mt-6 max-w-[34ch] border-t border-rule-strong pt-6 font-display text-[1.35rem] font-light leading-[1.24] tracking-[-0.012em] md:mt-8 md:pt-8 md:text-[1.95rem] md:leading-[1.2]"
+      >
+        {t.hero.lead}
+      </p>
+
+      <ul class="mt-8 hidden flex-wrap items-center gap-x-6 gap-y-3 text-sm md:flex">
+        <li>
+          <a href="#projects" class="cta">
+            {t.hero.selectedWork} <span class="cta-arrow" aria-hidden="true">↓</span>
+          </a>
+        </li>
+        <li><a class="link" href={profile.links.github} rel="me">GitHub</a></li>
+        <li><a class="link" href={profile.links.linkedin} rel="me">LinkedIn</a></li>
+        <li><a class="link" href={`mailto:${profile.email}`}>{t.hero.email}</a></li>
+      </ul>
+    </div>
+
+    <!-- Current trajectory: readable at a glance, above the fold -->
+    <div class="md:col-span-5 md:self-end">
+      <p class="label mb-3" id="trajectory-title">{t.hero.trajectoryTitle}</p>
+      <ol aria-labelledby="trajectory-title" class="border border-rule bg-sunken">
+        {
+          rows.map((r) => (
+            <li class="border-b border-rule last:border-b-0">
+              <a
+                href={r.href}
+                class:list={['trajectory-item group grid grid-cols-[6.75rem_1fr] gap-3 px-4 py-4 sm:px-5', r.current && 'is-current']}
+              >
+                <span class="label flex items-start gap-1.5 pt-1">
+                  {r.current && <span class="live-dot mt-[0.3rem]" aria-hidden="true" />}
+                  {r.when}
+                </span>
+                <span>
+                  <span class="block font-display text-[1.2rem] leading-tight tracking-[-0.01em] md:text-[1.3rem]">
+                    {r.role}
+                  </span>
+                  <span class="mt-1 block text-sm text-muted">
+                    <span class="font-medium text-ink">{r.org}</span> · {r.detail}
+                  </span>
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+
+    <!-- On small screens the CTAs follow the trajectory so roles stay above the fold -->
+    <ul class="-mt-2 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm md:hidden">
+      <li>
+        <a href="#projects" class="cta">
+          {t.hero.selectedWork} <span class="cta-arrow" aria-hidden="true">↓</span>
+        </a>
+      </li>
+      <li><a class="link" href={profile.links.github} rel="me">GitHub</a></li>
+      <li><a class="link" href={profile.links.linkedin} rel="me">LinkedIn</a></li>
+    </ul>
+  </div>
+</section>
