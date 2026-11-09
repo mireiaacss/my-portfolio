@@ -1,12 +1,15 @@
 // @ts-check
 import { defineConfig, fontProviders } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
+import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-  // TODO: replace with the production domain once it exists.
-  // Canonical URLs, OpenGraph URLs and the JSON-LD `url` are all derived from this.
-  site: 'https://mireiaacss.github.io',
+  // Production domain (Vercel). Canonical, hreflang, OpenGraph, JSON-LD and the
+  // sitemap are all derived from this single value.
+  site: 'https://mireiacalvino.vercel.app',
+  // Matches Vercel's default and the URLs getAbsoluteLocaleUrl() emits (/es/, /ca/).
+  trailingSlash: 'always',
 
   // Native i18n routing: English at /, Spanish at /es/, Catalan at /ca/.
   i18n: {
@@ -44,6 +47,15 @@ export default defineConfig({
       subsets: ['latin'],
       fallbacks: ['ui-monospace', 'monospace'],
     },
+  ],
+
+  integrations: [
+    sitemap({
+      i18n: {
+        defaultLocale: 'en',
+        locales: { en: 'en', es: 'es', ca: 'ca' },
+      },
+    }),
   ],
 
   vite: {

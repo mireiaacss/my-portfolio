@@ -191,5 +191,4 @@ export const ca: Dictionary = {
     location: 'Barcelona',
   },
   footer: { colophon: 'Compost en Newsreader i Geist. Fet amb Astro.', backToTop: 'Torna a dalt' },
-  jobTitle: 'Assistència docent en IA agèntica',
 };

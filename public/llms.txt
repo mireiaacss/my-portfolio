@@ -1,0 +1,46 @@
+# Mireia Calviño Saez
+
+> Aspiring Data Scientist & Machine Learning Engineer based in Barcelona, Spain. Studying the Double Degree in Business Administration and Artificial Intelligence at Esade (Universitat Ramon Llull), class of 2028. Builds applied machine learning models, statistical analyses and data-driven systems that solve real operational problems and create measurable business value.
+
+Also known as: Mireia Calviño. Languages: Spanish (native), Catalan (native), English (C1), German (basic). Open to roles in Data Science, Machine Learning, Applied AI, and Academic/Industry Research.
+
+## Profile
+
+- [Portfolio (English)](https://mireiacalvino.vercel.app/): Full profile: experience, projects, skills and contact
+- [Portfolio (Español)](https://mireiacalvino.vercel.app/es/): Spanish version
+- [Portfolio (Català)](https://mireiacalvino.vercel.app/ca/): Catalan version
+
+## Education
+
+- **Double Degree in Business Administration and Artificial Intelligence**, Esade Business & Law School, Universitat Ramon Llull (Sep 2023 – Jun 2028)
+- Coursework: Statistical Inference, Optimisation & Computational Modelling, Data Structures & Algorithms, Machine Learning, Deep Learning, Cloud Solutions
+- Matrícula de Honor in Introduction to Quantum Information, first in cohort
+- Member of Enode: Transformer research and a year-long applied AI project
+- Data Scientist in Python certification, DataCamp (in progress)
+
+## Experience
+
+- **Teaching Assistant, Agentic AI**, Esade AI Bootcamp (Oct 2026 – Nov 2026, Barcelona): ran hands-on labs on agentic AI tools (Claude Code, Codex, Antigravity, Kiro) for MBA and Master's students; coached them on skills, subagents, instruction files and MCP connectors, from first agent to deployed automation.
+- **Data & Business Strategy Intern**, Oncoviva, MedTech (Jul 2026 – Aug 2026, remote): AI-assisted audit of strategy documentation, adoption-curve estimates and predictive customer-acquisition models from unstructured HealthTech data, financial sensitivity models and Virtual Data Room analytics for investment committees.
+
+## Projects
+
+- [Industrial Predictive Maintenance & Telemetry Alerting](https://github.com/mireiaacss/predictive-maintenance-alerts): Random Forest failure prediction from industrial sensor telemetry (3.3% failure rate across 10,000 records), 0.98 ROC-AUC. Failure probability is mapped to early-warning tiers; an LLM (Llama 3.1 via Groq) writes a diagnosis and an n8n workflow alerts the operator on Telegram. Stack: Python, scikit-learn, Streamlit, n8n.
+- [AI Maintenance Tool for Solar Panels](https://github.com/mireiaacss/solar-dust-analysis): fine-tuned Vision Transformer (ViT) that classifies dust soiling on solar panels with a confidence score, followed by a Llama 3.3 70B layer that estimates the monetary loss from power degradation. Local Gradio app with no image persistence. Stack: PyTorch, Hugging Face, Gradio.
+- [Costa Rican Household Poverty Vulnerability Analysis](https://github.com/mireiaacss/costa-rican-household-poverty-prediction): multiclass poverty-tier models stalled at 0.42 macro-F1 due to structural class overlap; a three-way feature selection framework (correlation, mutual information, Random Forest importance) isolated 17 predictors, and reframing as binary triage reached 0.81 ROC-AUC with Logistic Regression and a household-level stratified split to prevent leakage.
+- [Privacy-Preserving Customer Acquisition (Federated Learning)](https://github.com/mireiaacss/federated_learning): Federated Averaging across three bank nodes, sharing only model weights; node-local SMOTE and F1-tuned thresholds for an 88/12 class imbalance; 0.90 ROC-AUC with zero raw records shared. Streamlit dashboard compares federated and centralised training.
+- [Quantum-Ready Portfolio Optimiser](https://github.com/mireiaacss/quantum_portfolio_optimiser) (exploratory): cardinality-constrained Markowitz portfolio selection formulated as a QUBO Hamiltonian, Ledoit-Wolf covariance shrinkage, D-Wave Neal simulated annealing compared with classical baselines.
+
+## Skills
+
+- Machine Learning: Logistic Regression, Random Forest, XGBoost, SGD, recommendation systems, imbalanced learning (SMOTE, class weighting), cross-validation, feature selection and leakage prevention
+- Deep Learning & Computer Vision: deep neural networks, CNNs, Vision Transformers (ViT), PyTorch, Hugging Face
+- Agentic AI & LLMs: Claude Code, Model Context Protocol (MCP), n8n workflow automation, LLM integration
+- Optimisation: genetic algorithms, Monte Carlo, QUBO / simulated annealing
+- Tools: Python, SQL, pandas, NumPy, scikit-learn, Streamlit, Gradio, Git, Docker
+
+## Contact
+
+- [GitHub](https://github.com/mireiaacss)
+- [LinkedIn](https://www.linkedin.com/in/mireia-calvino/)
+- [Email](mailto:mireia.calvino@gmail.com)

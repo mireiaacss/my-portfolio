@@ -21,37 +21,54 @@ const ogImage = new URL(image, Astro.site);
 
 const sameAs = [profile.links.linkedin, profile.links.github, profile.links.social].filter(Boolean);
 
-const personLd = {
+const siteRoot = new URL('/', Astro.site).href;
+const personId = `${siteRoot}#person`;
+const esade = {
+  '@type': 'CollegeOrUniversity',
+  '@id': `${siteRoot}#esade`,
+  name: profile.worksFor.name,
+  url: profile.worksFor.url,
+};
+
+const structuredData = {
   '@context': 'https://schema.org',
-  '@type': 'Person',
-  // Same @id on every locale: one entity, three localised pages.
-  '@id': new URL('/#person', Astro.site).href,
-  name: profile.name,
-  givenName: profile.givenName,
-  familyName: profile.familyName,
-  description: `${t.hero.careerTarget}. ${t.hero.lead}`,
-  jobTitle: t.jobTitle,
-  worksFor: {
-    '@type': 'Organization',
-    name: profile.worksFor.name,
-    url: profile.worksFor.url,
-  },
-  affiliation: {
-    '@type': 'CollegeOrUniversity',
-    name: 'Esade Business & Law School, Universitat Ramon Llull',
-  },
-  url: canonical,
-  mainEntityOfPage: canonical,
-  image: ogImage.href,
-  email: `mailto:${profile.email}`,
-  address: {
-    '@type': 'PostalAddress',
-    addressLocality: profile.location.locality,
-    addressCountry: profile.location.country,
-  },
-  sameAs,
-  knowsAbout: profile.knowsAbout,
-  knowsLanguage: ['es', 'ca', 'en', 'de'],
+  '@graph': [
+    {
+      '@type': 'Person',
+      // Same @id on every locale: one entity, three localised ProfilePages.
+      '@id': personId,
+      name: profile.name,
+      alternateName: profile.alternateName,
+      givenName: profile.givenName,
+      familyName: profile.familyName,
+      description: `${t.hero.careerTarget}. ${t.hero.lead}`,
+      jobTitle: profile.jobTitle,
+      worksFor: esade,
+      alumniOf: { '@id': esade['@id'] },
+      url: siteRoot,
+      image: ogImage.href,
+      email: `mailto:${profile.email}`,
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: profile.location.locality,
+        addressCountry: profile.location.country,
+      },
+      sameAs,
+      knowsAbout: profile.knowsAbout,
+      knowsLanguage: ['es', 'ca', 'en', 'de'],
+    },
+    {
+      '@type': 'ProfilePage',
+      '@id': `${canonical}#profilepage`,
+      url: canonical,
+      name: title,
+      description,
+      inLanguage: localeMeta[locale].htmlLang,
+      isPartOf: { '@type': 'WebSite', '@id': `${siteRoot}#website`, url: siteRoot, name: profile.name },
+      mainEntity: { '@id': personId },
+      about: { '@id': personId },
+    },
+  ],
 };
 ---
 
@@ -67,6 +84,8 @@ const personLd = {
     {alternates.map((a) => <link rel="alternate" hreflang={a.hreflang} href={a.href} />)}
     <link rel="alternate" hreflang="x-default" href={xDefault} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="alternate" type="text/markdown" title="LLM summary" href="/llms.txt" />
     <meta name="generator" content={Astro.generator} />
 
     <!-- OpenGraph -->
@@ -100,7 +119,7 @@ const personLd = {
     <Font cssVariable="--font-geist" preload />
     <Font cssVariable="--font-geist-mono" />
 
-    <script type="application/ld+json" set:html={JSON.stringify(personLd)} />
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData).replace(/</g, "\\u003c")} />
   </head>
   <body class="min-h-dvh">
     <a

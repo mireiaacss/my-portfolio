@@ -49,7 +49,6 @@ export type Dictionary = {
   };
   contact: { title: string; callout: string; basedIn: string; location: string };
   footer: { colophon: string; backToTop: string };
-  jobTitle: string;
 };
 
 export const en: Dictionary = {
@@ -243,5 +242,4 @@ export const en: Dictionary = {
     location: 'Barcelona, Spain',
   },
   footer: { colophon: 'Set in Newsreader & Geist. Built with Astro.', backToTop: 'Back to top' },
-  jobTitle: 'Teaching Assistant, Agentic AI',
 };

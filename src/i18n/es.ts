@@ -191,5 +191,4 @@ export const es: Dictionary = {
     location: 'Barcelona, España',
   },
   footer: { colophon: 'Compuesto en Newsreader y Geist. Hecho con Astro.', backToTop: 'Volver arriba' },
-  jobTitle: 'Asistencia docente en IA agéntica',
 };
